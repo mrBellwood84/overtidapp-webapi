@@ -1,12 +1,13 @@
 ﻿namespace Domain.Employer
 {
-    public class EmployerEditRequestEntity
+    /// <summary>
+    /// Dto for suggesting changes to an employer entity.
+    /// </summary>
+    /// <remarks>
+    /// Use EmployerEditRequestDto for http update requests!
+    /// </remarks>
+    public class EmployerEditSuggestionDto
     {
-        /// <summary>
-        /// Db entity id
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Employer entity id
         /// </summary>
@@ -47,16 +48,9 @@
         /// </summary>
         public bool HasAgreement { get; set; }
 
-
         /// <summary>
         /// Username of user requesting change
         /// </summary>
         public string RequestedBy { get; set; }
-
-        /// <summary>
-        /// True if change request is resolved
-        /// </summary>
-        public bool Resolved { get; set; }
-
     }
 }

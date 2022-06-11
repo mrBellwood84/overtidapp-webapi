@@ -43,7 +43,7 @@ namespace Persistence
         /// <summary>
         /// Db set for employers edit requests
         /// </summary>
-        public DbSet<EmployerEditRequestEntity> EmployersEditRequests { get; set; }
+        public DbSet<EmployerEditSuggestionEntity> EmployerEditSuggestions { get; set; }
 
     }
 }

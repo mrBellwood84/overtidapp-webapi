@@ -1,11 +1,11 @@
 ﻿namespace Domain.Employer
 {
-    public class EmployerEditRequestDto
+    public class EmployerEditSuggestionEntity
     {
         /// <summary>
-        /// Entity id for request
+        /// Db entity id
         /// </summary>
-        public Guid RequestId { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Employer entity id
@@ -42,17 +42,21 @@
         /// </summary>
         public string Region { get; set; }
 
-#nullable enable
         /// <summary>
         /// True if an agreement should be added
         /// </summary>
-        public Guid? CollectiveAgreementId { get; set; }
-#nullable disable
+        public bool HasAgreement { get; set; }
+
 
         /// <summary>
         /// Username of user requesting change
         /// </summary>
-        public string EditedBy { get; set; }
+        public string RequestedBy { get; set; }
+
+        /// <summary>
+        /// True if change request is resolved
+        /// </summary>
+        public bool Resolved { get; set; }
+
     }
 }
-

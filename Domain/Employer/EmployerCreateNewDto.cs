@@ -8,11 +8,11 @@
         /// <summary>
         /// Data from public records, store directly in entity
         /// </summary>
-        public EmployerEditRequestDto PublicData { get; set; }
+        public EmployerEditSuggestionDto LegalData { get; set; }
 
         /// <summary>
         /// Change request for actual business name and address, stored as EditRequest
         /// </summary>
-        public EmployerEditRequestDto UsedData { get; set; }
+        public EmployerEditSuggestionDto ChangeSuggestion { get; set; }
     }
 }
