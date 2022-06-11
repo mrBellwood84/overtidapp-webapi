@@ -34,7 +34,7 @@ namespace API.Controllers.Account
             {
                 FirstName = signUpDto.FirstName,
                 LastName = signUpDto.LastName,
-                UserName = $"user-{Guid.NewGuid().ToString()}",
+                UserName = $"user-{Guid.NewGuid()}",
                 Email = signUpDto.Email,
                 Role = "user"
             };

@@ -20,7 +20,7 @@ namespace Identity.Context
                 {
                     FirstName = "App",
                     LastName = "Admin",
-                    UserName = $"user-{Guid.NewGuid().ToString()}",
+                    UserName = $"user-{Guid.NewGuid()}",
                     Email = "admin@app.com", 
                     Role = "admin" 
                 },
@@ -28,7 +28,7 @@ namespace Identity.Context
                 {
                     FirstName = "John", 
                     LastName = "Doe", 
-                    UserName = $"user-{Guid.NewGuid().ToString()}", 
+                    UserName = $"user-{Guid.NewGuid()}", 
                     Email = "john@app.com", 
                     Role = "user" 
                 },
@@ -36,7 +36,7 @@ namespace Identity.Context
                 {
                     FirstName = "Jane",
                     LastName = "Doe",
-                    UserName = $"user-{Guid.NewGuid().ToString()}",
+                    UserName = $"user-{Guid.NewGuid()}",
                     Email = "jane@app.com",
                     Role= "user"
 

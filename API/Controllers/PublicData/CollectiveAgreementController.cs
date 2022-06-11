@@ -11,14 +11,10 @@ namespace API.Controllers.PublicData
     public class CollectiveAgreementController : ControllerBase
     {
         private readonly IPublicDataService _data;
-        private readonly IMemoryCache _cache;
-        private readonly string _cacheKey;
 
-        public CollectiveAgreementController(IPublicDataService data, IMemoryCache cache)
+        public CollectiveAgreementController(IPublicDataService data)
         {
-            _data       = data;
-            _cache      = cache;
-            _cacheKey   = data.CollectiveAgreementData.CacheKey;
+            _data = data;
         }
 
         [HttpGet]
