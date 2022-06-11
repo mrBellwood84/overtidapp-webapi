@@ -5,6 +5,10 @@ using Persistence;
 
 namespace Application.PublicDataService.DataHandlers
 {
+
+    /// <summary>
+    /// Handle collective agreement data entitites
+    /// </summary>
     public class CollectiveAgreementDataHandler
     {
         private readonly PublicDataContext _context;
@@ -24,29 +28,73 @@ namespace Application.PublicDataService.DataHandlers
             _memoryCache = memoryCache;
         }
 
-        public async Task<List<CollectiveAgreement>> GetAll()
+
+        /// <summary>
+        /// Return Collective agreement entities as list
+        /// </summary>
+        /// <remarks>
+        /// Query result stored in memory cache
+        /// </remarks>
+        public async Task<List<CollectiveAgreementEntity>> GetAll()
         {
-            var result = await _context.CollectiveAgreeements
-                .Include(e => e.Editions)
-                .ThenInclude(f => f.SalaryTables)
-                .ThenInclude(g => g.SupplementEvening)
-                .Include(e => e.Editions)
-                .ThenInclude(f => f.SalaryTables)
-                .ThenInclude(g => g.SupplementSaturday)
-                .Include(e => e.Editions)
-                .ThenInclude(f => f.SalaryTables)
-                .ThenInclude(g => g.SupplementSunday)
-                .Include(e => e.Editions)
-                .ThenInclude(f => f.SalaryTables)
-                .ThenInclude(g => g.SupplementNight)
-                .Include(e => e.Editions)
-                .ThenInclude(f => f.SalaryTables)
-                .ThenInclude(g => g.SupplementNightLabour)
-                .ToListAsync<CollectiveAgreement>();
 
-            _memoryCache.Set(_cacheKey, result);
+            var agreementList = _memoryCache.Get(_cacheKey) as List<CollectiveAgreementEntity>;
 
-            return result;
+            if (agreementList == null)
+            {
+                agreementList = await _context.CollectiveAgreeements
+
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.MaxHourDefinitions)
+                    
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.TimeCalculationRule)
+                            .ThenInclude(g => g.Reference)
+
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.OvertimeRegular)
+                            .ThenInclude(g => g.Reference)
+
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.OvertimeNight)
+                            .ThenInclude(g => g.Reference)
+
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.OvertimeDayOff)
+                            .ThenInclude(g => g.Reference)
+
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.OvertimeDayoffPartTime)
+                            .ThenInclude(g => g.Reference)
+                    
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.SalaryTables)
+                            .ThenInclude(g => g.SupplementEvening)
+
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.SalaryTables)
+                            .ThenInclude(g => g.SupplementSaturday)
+
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.SalaryTables)
+                            .ThenInclude(g => g.SupplementSunday)
+
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.SalaryTables)
+                            .ThenInclude(g => g.SupplementNight)
+
+                    .Include(e => e.Editions)
+                        .ThenInclude(f => f.SalaryTables)
+                            .ThenInclude(g => g.SupplementNightLabour)
+
+                    .AsSplitQuery()
+                    .ToListAsync();
+
+                _memoryCache.Set(_cacheKey, agreementList);
+            }
+
+            return agreementList;
+
         }
     }
 }

@@ -15,7 +15,7 @@
         /// <summary>
         /// Date for salary expiration, null if not expired
         /// </summary>
-        public DateTime? Expired { get; set; }
+        public DateTime Expire { get; set; }
 
 
         /// <summary>
@@ -42,5 +42,6 @@
         /// Wage supplement for night shift with labour
         /// </summary>
         public WageSupplement SupplementNightLabour { get; set; }
+
     }
 }

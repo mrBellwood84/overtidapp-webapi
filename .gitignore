@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/API/identity.db
+/API/publicdata.db
+/API/userdata.db
+/Persistence/Migrations
+/API/userdata.db-wal
+/API/userdata.db-shm
+/API/publicdata.db-wal
+/API/publicdata.db-shm
+/API/identity.db-wal
+/API/identity.db-shm
+/Identity/Migrations

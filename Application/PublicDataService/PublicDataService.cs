@@ -10,6 +10,7 @@ namespace Application.PublicDataService
         private readonly IMemoryCache _memoryCache;
 
 
+        public AmlDataHandler AmlData { get; set; }
         public CollectiveAgreementDataHandler CollectiveAgreementData { get; }
         public EmployerDataHandler EmployerData { get; }
 
@@ -19,6 +20,7 @@ namespace Application.PublicDataService
             _context = context;
             _memoryCache = memoryCache;
 
+            AmlData = new AmlDataHandler(_context, _memoryCache);
             CollectiveAgreementData = new CollectiveAgreementDataHandler(_context, _memoryCache);
             EmployerData = new EmployerDataHandler(_context, _memoryCache);
         }

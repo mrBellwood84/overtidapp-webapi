@@ -1,104 +1,94 @@
 ﻿using Domain.Agreements.CollectiveAgreement;
-using Domain.Employment;
+using Domain.Employer;
 
 namespace Persistence.SeedData
 {
     internal static class EmployerSeedData
     {
-        public static List<Employer> CreateEmployers(CollectiveAgreement agreement) 
+        public static List<EmployerEntity> CreateEmployers(CollectiveAgreementEntity agreement) 
         {
-            var employers = new List<Employer> {
-                new Employer {
+            var employers = new List<EmployerEntity> {
+                new EmployerEntity {
+
                     Id = Guid.NewGuid(),
 
-                    Name            = "Good Hotel",
-                    NameOfficial    = "Good Hotel",
-                    Address         = "Good Street 11",
-                    AddressOfficial = "Good Street 11",
+                    NameLegal       = "Good Hotel",
+                    NameUsed        = "Good Hotel",
+                    AddressLegal    = "Good Street 11",
+                    AddressUsed     = "Good Street 11",
 
                     OrganizationNumber = "111.222.333",
 
-                    PostalArea          = "Smallville",
-                    PostalAreaOfficial  = "Smallville",
+                    PostAreaLegal   = "Smallville",
+                    PostAreaUsed    = "Smallville",
 
-                    ZipCode             = "1202",
-                    ZipCodeOfficial     = "1202",
+                    ZipCodeLegal    = "1202",
+                    ZipCodeUsed     = "1202",
 
-                    County              = "Metropolis",
-                    CountyOfficial      = "Metropolis",
+                    RegionLegal     = "Metropolis",
+                    RegionUsed      = "Metropolis",
 
-                    CollectiveAgreeementId  = agreement.Id,
-                    SpecialAgreements       = null,
+                    CollectiveAgreementId  = agreement.Id,
 
-                    HaveEditRequest = false,
-
-                    DataSource = "System",
-                    DateAdded = DateTime.UtcNow,
-                    DateLastEdit = DateTime.UtcNow,
-                    EditedBy = "System"
+                    DateAdded       = DateTime.UtcNow,
+                    AddedBy         = "System",
+                    DateLastUpdate  = DateTime.UtcNow,
+                    LastUpdateBy    = "System"
                 },
-                new Employer
-                {
+                new EmployerEntity {
+
                     Id = Guid.NewGuid(),
 
-                    Name            = "Regular Hotel",
-                    NameOfficial    = "Regular Hotel",
+                    NameLegal       = "Regular Hotel",
+                    NameUsed        = "Regular Hotel",
+                    AddressLegal    = "Mainstreet 11",
+                    AddressUsed     = "Maintreet 11",
 
-                    OrganizationNumber = "222.333.444",
+                    OrganizationNumber = "222.111.333",
 
-                    Address         = "Average Street 12",
-                    AddressOfficial = "Average Street 12",
+                    PostAreaLegal   = "Smallville",
+                    PostAreaUsed    = "Smallville",
 
-                    PostalArea          = "Smallville",
-                    PostalAreaOfficial  = "Smallville",
+                    ZipCodeLegal    = "1202",
+                    ZipCodeUsed     = "1202",
 
-                    ZipCode         = "1202",
-                    ZipCodeOfficial = "1202",
+                    RegionLegal     = "Metropolis",
+                    RegionUsed      = "Metropolis",
 
-                    County              = "Metropolis",
-                    CountyOfficial      = "Metropolis",
+                    CollectiveAgreementId  = agreement.Id,
 
-                    CollectiveAgreeementId  = agreement.Id,
-                    SpecialAgreements       = null,
-
-                    HaveEditRequest = false,
-
-                    DataSource = "System",
-                    DateAdded = DateTime.UtcNow,
-                    DateLastEdit = DateTime.UtcNow,
-                    EditedBy = "System"
+                    DateAdded       = DateTime.UtcNow,
+                    AddedBy         = "System",
+                    DateLastUpdate  = DateTime.UtcNow,
+                    LastUpdateBy    = "System"
                 },
-                new Employer
-                {
-                    Id= Guid.NewGuid(),
+                new EmployerEntity {
 
-                    Name            = "Bad Restaurant",
-                    NameOfficial    = "Bad Restaurant",
+                    Id = Guid.NewGuid(),
 
-                    OrganizationNumber = "121.212.444",
+                    NameLegal       = "Shitty Hotel",
+                    NameUsed        = "Shitty Hotel",
+                    AddressLegal    = "Shitstreet 11",
+                    AddressUsed     = "Shitstreet 11",
 
-                    Address         = "Crapstreet 13",
-                    AddressOfficial = "Crapstreet 13",
+                    OrganizationNumber = "222.333.111",
 
-                    PostalArea          = "Smallville",
-                    PostalAreaOfficial  = "Smallville",
+                    PostAreaLegal   = "Smallville",
+                    PostAreaUsed    = "Smallville",
 
-                    ZipCode         = "1202",
-                    ZipCodeOfficial = "1202",
+                    ZipCodeLegal    = "1202",
+                    ZipCodeUsed     = "1202",
 
-                    County              = "Metropolis",
-                    CountyOfficial      = "Metropolis",
+                    RegionLegal     = "Metropolis",
+                    RegionUsed      = "Metropolis",
 
-                    CollectiveAgreeementId  = null,
-                    SpecialAgreements       = null,
+                    CollectiveAgreementId  = null,
 
-                    HaveEditRequest = false,
-
-                    DataSource = "System",
-                    DateAdded = DateTime.UtcNow,
-                    DateLastEdit = DateTime.UtcNow,
-                    EditedBy = "System"
-                }
+                    DateAdded       = DateTime.UtcNow,
+                    AddedBy         = "System",
+                    DateLastUpdate  = DateTime.UtcNow,
+                    LastUpdateBy    = "System"
+                },
             };
 
             return employers;

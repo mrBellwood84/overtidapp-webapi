@@ -1,5 +1,6 @@
-﻿using Domain.Agreements.CollectiveAgreement;
-using Domain.Employment;
+﻿using Domain.Agreements.Aml;
+using Domain.Agreements.CollectiveAgreement;
+using Domain.Employer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -24,19 +25,25 @@ namespace Persistence
             options.UseSqlite(_config.GetConnectionString("PublicData"));
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Employer>()
-                .HasOne<CollectiveAgreement>()
-                .WithMany()
-                .OnDelete(DeleteBehavior.NoAction);
-        }
+        /// <summary>
+        /// Dataset for Working Environment Act
+        /// </summary>
+        public DbSet<AmlEntity> Aml { get; set; }
 
-        public DbSet<CollectiveAgreement> CollectiveAgreeements { get; set; }
+        /// <summary>
+        /// Db set for collective agreements
+        /// </summary>
+        public DbSet<CollectiveAgreementEntity> CollectiveAgreeements { get; set; }
 
-        public DbSet<Employer> Employers { get; set; }
+        /// <summary>
+        /// Db set for employer
+        /// </summary>
+        public DbSet<EmployerEntity> Employers { get; set; }
 
-        public DbSet<EmployerEditRequest> EmployersEditRequests { get; set; }
+        /// <summary>
+        /// Db set for employers edit requests
+        /// </summary>
+        public DbSet<EmployerEditRequestEntity> EmployersEditRequests { get; set; }
 
     }
 }

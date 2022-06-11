@@ -10,6 +10,8 @@ using Persistence.SeedData;
 
 // create builder
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 
 // add services from extentions
@@ -28,26 +30,18 @@ using var scope = app.Services.CreateScope();
 var service = scope.ServiceProvider;
 
 // try seeding data
-try
-{
-    var identityContext = service.GetRequiredService<IdentityDataContext>();
-    var publicDataContext = service.GetRequiredService<PublicDataContext>();
-    var userDataContext = service.GetRequiredService<UserDataContext>();
+var identityContext = service.GetRequiredService<IdentityDataContext>();
+var publicDataContext = service.GetRequiredService<PublicDataContext>();
+var userDataContext = service.GetRequiredService<UserDataContext>();
 
-    var userManager = service.GetRequiredService<UserManager<AppUser>>();
-    identityContext.Database.Migrate();
-    await IdentitySeedUsers.Seed(identityContext, userManager);
+var userManager = service.GetRequiredService<UserManager<AppUser>>();
+identityContext.Database.Migrate();
+await IdentitySeedUsers.Seed(identityContext, userManager);
 
-    publicDataContext.Database.Migrate();
-    await SeedAppData.SeedData(publicDataContext);
+publicDataContext.Database.Migrate();
+await SeedAppData.SeedData(publicDataContext);
 
-    userDataContext.Database.Migrate();
-}
-catch (Exception ex)
-{
-    var logger = service.GetRequiredService<ILogger>();
-    logger.LogError(ex, "An error occured during DB migration");
-}
+userDataContext.Database.Migrate();
 
 // Configure the HTTP request pipeline.
 

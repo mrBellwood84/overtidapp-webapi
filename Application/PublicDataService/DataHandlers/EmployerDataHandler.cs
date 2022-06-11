@@ -1,4 +1,4 @@
-﻿using Domain.Employment;
+﻿using Domain.Employer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Persistence;
@@ -9,13 +9,7 @@ namespace Application.PublicDataService.DataHandlers
     {
         private readonly PublicDataContext _context;
         private readonly IMemoryCache _memoryCache;
-        private readonly string _cacheKey = "Employers";
-
-
-        /// <summary>
-        /// Retrive cache key
-        /// </summary>
-        public string CacheKey { get => _cacheKey; }
+        private readonly string _keyShort = "employerShort";
 
 
         public EmployerDataHandler(PublicDataContext context, IMemoryCache memoryCache)
@@ -24,13 +18,29 @@ namespace Application.PublicDataService.DataHandlers
             _memoryCache = memoryCache;
         }
 
-        public async Task<List<Employer>> GetAllEmployers()
+        public async Task<List<EmployerShortDto>> GetEmployerShortInfo()
         {
-            var list = await _context.Employers.ToListAsync();
-            _memoryCache.Set(_cacheKey, list);
-            return list;
+            var employerList = _memoryCache.Get(_keyShort) as List<EmployerShortDto>;
+
+            if (employerList == null)
+            {
+                employerList = await (from emp in _context.Employers select new EmployerShortDto
+                {
+                    Id = emp.Id,
+                    Name = emp.NameUsed,
+                    OrganizationNumber = emp.OrganizationNumber,
+                    Region = emp.RegionUsed,
+                    HasAgreement = emp.CollectiveAgreementId != null
+
+                }).ToListAsync();
+
+                _memoryCache.Set(_keyShort, employerList);
+            }
+
+            return employerList;
         }
 
+        /*
         public async Task<Employer> AddNewEmployer(NewEmployerRequest request)
         {
             // create new employer entity
@@ -93,5 +103,6 @@ namespace Application.PublicDataService.DataHandlers
             var list  = await _context.EmployersEditRequests.Where(x => x.Resolved == false).ToListAsync();
             return list;
         }
+        */
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Application.PublicDataService;
-using Domain.Employment;
+using Domain.Employer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -11,37 +11,29 @@ namespace API.Controllers.PublicData
     public class EmployerController : ControllerBase
     {
         private readonly IPublicDataService _publicData;
-        private readonly IMemoryCache _memoryCache;
-        private readonly string _cacheKey;
 
         public EmployerController(IPublicDataService publicData, IMemoryCache cache)
         {
             _publicData = publicData;
-            _memoryCache = cache;
-            _cacheKey = publicData.EmployerData.CacheKey;
         }
+        
 
-        [HttpGet]
+        [HttpGet("short")]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Employer>>> GetAllEmployers()
+        public async Task<ActionResult<List<EmployerShortDto>>> GetAllEmployers()
         {
             try
             {
-                var result = _memoryCache.Get<List<Employer>>(_cacheKey);
-
-                if (result == null)
-                {
-                    result = await _publicData.EmployerData.GetAllEmployers();
-                }
+                var result = await _publicData.EmployerData.GetEmployerShortInfo();
 
                 return Ok(result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
-
+        /*
         [HttpPost("add")]
         public async Task<ActionResult<Employer>> AddSingleEmployer(NewEmployerRequest request)
         {
@@ -69,6 +61,6 @@ namespace API.Controllers.PublicData
                 return StatusCode(500);
             }
         }
-
+        */
     }
 }

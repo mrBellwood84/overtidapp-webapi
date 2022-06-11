@@ -4,11 +4,13 @@
     {
         public static async Task SeedData(PublicDataContext context)
         {
-            var riksavtalen = CollectiveAgreementSeedData.CreateRiksAvtalen();
+            var aml = AmlSeedData.Create();
+            var riksavtalen = CollectiveAgreementSeedData.Create();
             var employers = EmployerSeedData.CreateEmployers(riksavtalen);
 
             if (!context.Employers.Any())
             {
+                await context.Aml.AddAsync(aml);
                 await context.CollectiveAgreeements.AddAsync(riksavtalen);
                 await context.Employers.AddRangeAsync(employers);
             }

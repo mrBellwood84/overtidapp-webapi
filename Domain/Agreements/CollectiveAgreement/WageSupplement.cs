@@ -24,6 +24,6 @@
         /// <summary>
         /// Rate in NOK for wage supplement
         /// </summary>
-        public float Rate { get; set; }
+        public double Rate { get; set; }
     }
 }

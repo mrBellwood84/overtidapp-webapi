@@ -23,25 +23,19 @@ namespace API.Controllers.PublicData
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<List<CollectiveAgreement>>> GetAllCollectiveAgreements()
+        public async Task<ActionResult<List<CollectiveAgreementEntity>>> GetAllCollectiveAgreements()
         {
             try
             {
-                var result = _cache.Get(_cacheKey);
-
-                if (result == null)
-                {
-                    result = await _data.CollectiveAgreementData.GetAll();
-                }
+                var result = await _data.CollectiveAgreementData.GetAll();
 
                 return Ok(result);
-            } catch (Exception)
+
+            } 
+            catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
-
-
-
     }
 }
