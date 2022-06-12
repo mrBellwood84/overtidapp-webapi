@@ -106,8 +106,8 @@ namespace Application.PublicDataService.DataHandlers
                 AddressLegal = newEmployer.LegalData.Address,
                 AddressUsed = newEmployer.LegalData.Address,
 
-                PostAreaLegal = newEmployer.LegalData.PostalArea,
-                PostAreaUsed = newEmployer.LegalData.PostalArea,
+                PostAreaLegal = newEmployer.LegalData.PostArea,
+                PostAreaUsed = newEmployer.LegalData.PostArea,
 
                 ZipCodeLegal = newEmployer.LegalData.ZipCode,
                 ZipCodeUsed = newEmployer.LegalData.ZipCode,
@@ -131,7 +131,7 @@ namespace Application.PublicDataService.DataHandlers
                     EmployerId = employer.Id,
                     Name = newEmployer.ChangeSuggestion.Name,
                     Address = newEmployer.ChangeSuggestion.Address,
-                    PostalArea = newEmployer.ChangeSuggestion.PostalArea,
+                    PostArea = newEmployer.ChangeSuggestion.PostArea,
                     ZipCode = newEmployer.ChangeSuggestion.ZipCode,
                     Region = newEmployer.ChangeSuggestion.Region,
                     HasAgreement = newEmployer.ChangeSuggestion.HasAgreement,
@@ -161,11 +161,11 @@ namespace Application.PublicDataService.DataHandlers
             var entity = new EmployerEditSuggestionEntity
             {
                 Id = Guid.NewGuid(),
-                EmployerId = suggestion.EmployerId,
+                EmployerId = suggestion.EmployerId ?? Guid.Empty,
                 Name = suggestion.Name,
                 OrganizationNumber = suggestion.OrganizationNumber,
                 Address = suggestion.Address,
-                PostalArea = suggestion.PostalArea,
+                PostArea = suggestion.PostArea,
                 ZipCode= suggestion.ZipCode,
                 Region = suggestion.Region,
                 HasAgreement = suggestion.HasAgreement,
@@ -191,7 +191,7 @@ namespace Application.PublicDataService.DataHandlers
 
             employer.NameUsed = requestDto.Name;
             employer.AddressUsed = requestDto.Address;
-            employer.PostAreaUsed = requestDto.PostalArea;
+            employer.PostAreaUsed = requestDto.PostArea;
             employer.ZipCodeUsed = requestDto.ZipCode;
             employer.RegionUsed = requestDto.Region;
             

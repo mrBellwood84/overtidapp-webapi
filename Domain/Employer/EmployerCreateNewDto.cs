@@ -1,7 +1,9 @@
 ﻿namespace Domain.Employer
 {
     /// <summary>
-    /// Create new employer dto
+    /// Create new employer with data from public records. 
+    /// Users suggested changes are stored as change suggestion and 
+    /// must be edited by admin in front end application
     /// </summary>
     public class EmployerCreateNewDto
     {

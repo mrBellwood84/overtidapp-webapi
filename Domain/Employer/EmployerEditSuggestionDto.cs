@@ -11,7 +11,7 @@
         /// <summary>
         /// Employer entity id
         /// </summary>
-        public Guid EmployerId { get; set; }
+        public Guid? EmployerId { get; set; }
 
         /// <summary>
         /// Used name to be changed
@@ -31,7 +31,7 @@
         /// <summary>
         /// Postal area to be changed
         /// </summary>
-        public string PostalArea { get; set; }
+        public string PostArea { get; set; }
 
         /// <summary>
         /// ZipCode to be changed

@@ -3,7 +3,6 @@ using Domain.Employer;
 using Domain.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 
 namespace API.Controllers.PublicData
@@ -19,7 +18,9 @@ namespace API.Controllers.PublicData
             _publicData = publicData;
         }
         
-
+        /// <summary>
+        /// Get employers short info data list
+        /// </summary>
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<List<EmployerShortDto>>> GetAllEmployers()
@@ -36,6 +37,10 @@ namespace API.Controllers.PublicData
             }
         }
 
+        /// <summary>
+        /// Get employers full info data list
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("full")]
         public async Task<ActionResult<List<EmployerEntity>>> GetAllEmployerFullInfo()
         {
@@ -51,14 +56,17 @@ namespace API.Controllers.PublicData
             }
         }
 
+        /// <summary>
+        /// Add new employer with change suggestions from user
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<EmployerEntity>> AddNewEmployer(EmployerCreateNewDto createNewDto)
         {
             try
             {
-                var res = await _publicData.EmployerData.AddNewEmployer(createNewDto);
+                var result = await _publicData.EmployerData.AddNewEmployer(createNewDto);
 
-                return Ok(res);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -66,9 +74,12 @@ namespace API.Controllers.PublicData
             }
         }
 
+        /// <summary>
+        /// Updates an employer entity based on a change suggestion (frontend)
+        /// </summary>
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> AddEmployerEditSuggestion(EmployerEditRequestDto editRequestDto)
+        public async Task<IActionResult> UpdateEmployerFromSuggestion(EmployerEditRequestDto editRequestDto)
         {
             var role = User.FindFirstValue(ClaimTypes.Role);
             if (role != "admin") return Forbid();
@@ -86,6 +97,9 @@ namespace API.Controllers.PublicData
             }
         }
 
+        /// <summary>
+        /// Delete an employer entity from
+        /// </summary>
         [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteEmployer(RequestByIdDto idDto)
@@ -93,6 +107,9 @@ namespace API.Controllers.PublicData
             var role = User.FindFirstValue(ClaimTypes.Role);
             if (role != "admin") return Forbid();
 
+            return BadRequest("DEV :: Changes to employment contract is required before this option is available!!!");
+
+            /*
             try
             {
                 await _publicData.EmployerData.DeleteEmployer(idDto.Id);
@@ -102,12 +119,16 @@ namespace API.Controllers.PublicData
             catch(Exception ex)
             {
                 return StatusCode(500, ex.Message);
-            }
+            } 
+            */
         }
 
+        /// <summary>
+        /// Get change suggestions for existing employer data from users
+        /// </summary>
         [Authorize]
         [HttpPost("suggest")]
-        public async Task<ActionResult<List<EmployerEditSuggestionEntity>>> GetNewEmployerEditSuggestion()
+        public async Task<ActionResult<List<EmployerEditSuggestionEntity>>> GetNewEmployerEditSuggestions()
         {
             var role = User.FindFirstValue(ClaimTypes.Role);
             if (role != "admin") return Forbid();
@@ -126,8 +147,11 @@ namespace API.Controllers.PublicData
             
         }
 
+        /// <summary>
+        /// Recive change suggestion for employer entity from user
+        /// </summary>
         [HttpPost("suggest")]
-        public async Task<IActionResult> AddEmployerEditSuggestion(EmployerEditSuggestionDto editSuggestion)
+        public async Task<IActionResult> AddEmployerChangeREquest(EmployerEditSuggestionDto editSuggestion)
         {
             try
             {
@@ -141,6 +165,9 @@ namespace API.Controllers.PublicData
             }
         }
 
+        /// <summary>
+        /// Delete a suggestion from database
+        /// </summary>
         [Authorize]
         [HttpDelete("suggest")]
         public async Task<IActionResult> DeleteSuggestionById(RequestByIdDto idDto)
@@ -160,6 +187,9 @@ namespace API.Controllers.PublicData
             }
         }
 
+        /// <summary>
+        /// Delete range of suggestions from same user
+        /// </summary>
         [Authorize]
         [HttpDelete("suggest/deleteallfromuser")]
         public async Task<IActionResult> DeleteAllSuggestionsFromUser(RequestByUserNameDto userNameDto)

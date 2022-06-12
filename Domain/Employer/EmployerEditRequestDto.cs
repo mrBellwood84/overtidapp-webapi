@@ -1,5 +1,10 @@
 ﻿namespace Domain.Employer
 {
+    /// <summary>
+    /// DTO for user suggestions for editing an existing employer.
+    /// Data is only used for changing place of employment (used),
+    /// legal data from public records will remain as downloaded from public records.
+    /// </summary>
     public class EmployerEditRequestDto
     {
         /// <summary>
@@ -30,7 +35,7 @@
         /// <summary>
         /// Postal area to be changed
         /// </summary>
-        public string PostalArea { get; set; }
+        public string PostArea { get; set; }
 
         /// <summary>
         /// ZipCode to be changed

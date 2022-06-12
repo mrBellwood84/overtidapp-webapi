@@ -7,11 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.SeedData;
 
-
 // create builder
 var builder = WebApplication.CreateBuilder(args);
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
 
 
 // add services from extentions
