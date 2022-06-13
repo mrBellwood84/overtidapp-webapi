@@ -8,11 +8,6 @@
     public class EmployerEditRequestDto
     {
         /// <summary>
-        /// Entity id for request
-        /// </summary>
-        public Guid RequestId { get; set; }
-
-        /// <summary>
         /// Employer entity id
         /// </summary>
         public Guid EmployerId { get; set; }

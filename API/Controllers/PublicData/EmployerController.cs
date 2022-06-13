@@ -87,9 +87,9 @@ namespace API.Controllers.PublicData
 
             try
             {
-                await _publicData.EmployerData.UpdateEmployer(editRequestDto);
+                var result = await _publicData.EmployerData.UpdateEmployer(editRequestDto);
 
-                return Ok();
+                return Created("Entity updated", result);
             }
             catch (Exception ex)
             {
@@ -127,7 +127,7 @@ namespace API.Controllers.PublicData
         /// Get change suggestions for existing employer data from users
         /// </summary>
         [Authorize]
-        [HttpPost("suggest")]
+        [HttpGet("suggest")]
         public async Task<ActionResult<List<EmployerEditSuggestionEntity>>> GetNewEmployerEditSuggestions()
         {
             var role = User.FindFirstValue(ClaimTypes.Role);
@@ -150,11 +150,20 @@ namespace API.Controllers.PublicData
         /// <summary>
         /// Recive change suggestion for employer entity from user
         /// </summary>
+        [Authorize]
         [HttpPost("suggest")]
-        public async Task<IActionResult> AddEmployerChangeREquest(EmployerEditSuggestionDto editSuggestion)
+        public async Task<IActionResult> AddEmployerChangeRequest(EmployerEditSuggestionDto editSuggestion)
         {
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             try
             {
+                var prevSubmit = await _publicData.EmployerData.CheckUserSuggestion(editSuggestion.EmployerId ?? Guid.Empty, user);
+                if (prevSubmit) return Forbid("User has already submitted a change request");
+
+                var realChange = await _publicData.EmployerData.CheckValidChangeSuggestion(editSuggestion);
+                if (!realChange) return BadRequest("Request does not contain real change");
+
                 await _publicData.EmployerData.AddEmployerEditSuggestion(editSuggestion);
 
                 return StatusCode(201, "Suggestion added");
@@ -182,27 +191,6 @@ namespace API.Controllers.PublicData
                 return Ok();
             }
             catch(Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Delete range of suggestions from same user
-        /// </summary>
-        [Authorize]
-        [HttpDelete("suggest/deleteallfromuser")]
-        public async Task<IActionResult> DeleteAllSuggestionsFromUser(RequestByUserNameDto userNameDto)
-        {
-            var role = User.FindFirstValue(ClaimTypes.Role);
-            if (role != "admin") return Forbid();
-
-            try
-            {
-                await _publicData.EmployerData.DeleteSuggestionByUserName(userNameDto.UserName);
-                return Ok();
-            }
-            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }

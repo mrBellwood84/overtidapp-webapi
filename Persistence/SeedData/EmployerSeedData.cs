@@ -30,6 +30,8 @@ namespace Persistence.SeedData
 
                     CollectiveAgreementId  = agreement.Id,
 
+                    HasChangeRequest = false,
+
                     DateAdded       = DateTime.UtcNow,
                     AddedBy         = "System",
                     DateLastUpdate  = DateTime.UtcNow,
@@ -57,6 +59,8 @@ namespace Persistence.SeedData
 
                     CollectiveAgreementId  = agreement.Id,
 
+                    HasChangeRequest = false,
+
                     DateAdded       = DateTime.UtcNow,
                     AddedBy         = "System",
                     DateLastUpdate  = DateTime.UtcNow,
@@ -83,6 +87,8 @@ namespace Persistence.SeedData
                     RegionUsed      = "Metropolis",
 
                     CollectiveAgreementId  = null,
+
+                    HasChangeRequest = false,
 
                     DateAdded       = DateTime.UtcNow,
                     AddedBy         = "System",

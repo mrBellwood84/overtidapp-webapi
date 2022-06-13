@@ -81,6 +81,10 @@
         /// </summary>
         public Guid? CollectiveAgreementId { get; set; }
 
+        /// <summary>
+        /// Set true if entity has an attached change request
+        /// </summary>
+        public bool HasChangeRequest { get; set; }
 
 
         /// <summary>

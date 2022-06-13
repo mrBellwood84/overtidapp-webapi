@@ -123,13 +123,21 @@ namespace Application.PublicDataService.DataHandlers
                 LastUpdateBy = "System",
             };
 
-            if (newEmployer.LegalData != newEmployer.ChangeSuggestion)
+            bool nameChange = newEmployer.LegalData.Name != newEmployer.ChangeSuggestion.Name;
+            bool addressChange = newEmployer.LegalData.Address != newEmployer.ChangeSuggestion.Address;
+            bool postAreaChange = newEmployer.LegalData.PostArea != newEmployer.ChangeSuggestion.PostArea;
+            bool zipCodeChange = newEmployer.LegalData.ZipCode != newEmployer.ChangeSuggestion.ZipCode;
+            bool regionChange = newEmployer.LegalData.Region != newEmployer.ChangeSuggestion.Region;
+            bool caChange = newEmployer.LegalData.HasAgreement != newEmployer.ChangeSuggestion.HasAgreement;
+
+            if (nameChange || addressChange || postAreaChange || zipCodeChange || regionChange || caChange)
             {
                 var changeSuggestion = new EmployerEditSuggestionEntity
                 {
                     Id = Guid.NewGuid(),
                     EmployerId = employer.Id,
                     Name = newEmployer.ChangeSuggestion.Name,
+                    OrganizationNumber = newEmployer.ChangeSuggestion.OrganizationNumber,
                     Address = newEmployer.ChangeSuggestion.Address,
                     PostArea = newEmployer.ChangeSuggestion.PostArea,
                     ZipCode = newEmployer.ChangeSuggestion.ZipCode,
@@ -139,8 +147,10 @@ namespace Application.PublicDataService.DataHandlers
                     Resolved = false,
                 };
 
+                employer.HasChangeRequest = true;
                 await _context.EmployerEditSuggestions.AddAsync(changeSuggestion);
             }
+
 
             await _context.Employers.AddAsync(employer);
             await _context.SaveChangesAsync();
@@ -150,6 +160,35 @@ namespace Application.PublicDataService.DataHandlers
             return employer;
         }
 
+        /// <summary>
+        /// Check if user already has submittet a change request for entity.
+        /// </summary>
+        /// <returns>
+        /// True if user has submitted a change request
+        /// </returns>
+        public async Task<bool> CheckUserSuggestion(Guid employerId, string username)
+        {
+            var result = await _context.EmployerEditSuggestions.Where(x => x.RequestedBy == username && x.EmployerId == employerId && x.Resolved == false).SingleAsync();
+            return result != null;
+        }
+
+        /// <summary>
+        /// Check if chnage suggestion contain any real changes
+        /// </summary>
+        /// <returns>True if dto contain real change to employer entity</returns>
+        public async Task<bool> CheckValidChangeSuggestion(EmployerEditSuggestionDto dto)
+        {
+            var entity = await _context.Employers.SingleAsync(x => x.Id == dto.EmployerId);
+
+            bool nameChange = entity.NameUsed != dto.Name;
+            bool addressChange = entity.AddressUsed != dto.Address;
+            bool postAreaChange = entity.PostAreaUsed != dto.PostArea;
+            bool zipCodeChange = entity.ZipCodeUsed != dto.ZipCode;
+            bool regionChange = entity.RegionUsed != dto.Region;
+
+            if (nameChange || addressChange || postAreaChange || zipCodeChange || regionChange || dto.HasAgreement) return true;
+            return false;
+        }
 
         /// <summary>
         /// Add edit sugggestion to database
@@ -158,7 +197,7 @@ namespace Application.PublicDataService.DataHandlers
         /// <returns></returns>
         public async Task AddEmployerEditSuggestion(EmployerEditSuggestionDto suggestion)
         {
-            var entity = new EmployerEditSuggestionEntity
+            var suggestionEntity = new EmployerEditSuggestionEntity
             {
                 Id = Guid.NewGuid(),
                 EmployerId = suggestion.EmployerId ?? Guid.Empty,
@@ -173,7 +212,10 @@ namespace Application.PublicDataService.DataHandlers
                 RequestedBy = suggestion.RequestedBy,
             };
 
-            await _context.EmployerEditSuggestions.AddAsync(entity);
+            var employerEntity = await _context.Employers.Where(x => x.Id == suggestion.EmployerId).FirstOrDefaultAsync();
+            employerEntity!.HasChangeRequest = true;
+
+            await _context.EmployerEditSuggestions.AddAsync(suggestionEntity);
 
             await _context.SaveChangesAsync();
 
@@ -190,15 +232,24 @@ namespace Application.PublicDataService.DataHandlers
             var employer = await GetSingleEmployerById(requestDto.EmployerId);
 
             employer.NameUsed = requestDto.Name;
+            employer.OrganizationNumber = requestDto.OrganizationNumber;
+
             employer.AddressUsed = requestDto.Address;
             employer.PostAreaUsed = requestDto.PostArea;
             employer.ZipCodeUsed = requestDto.ZipCode;
             employer.RegionUsed = requestDto.Region;
-            
+
             employer.CollectiveAgreementId = requestDto.CollectiveAgreementId;
 
-            var request = await _context.EmployerEditSuggestions.SingleAsync(x => x.Id == requestDto.RequestId);
-            request.Resolved = true;
+            employer.HasChangeRequest = false;
+
+            employer.DateLastUpdate = DateTime.UtcNow;
+            employer.LastUpdateBy = requestDto.EditedBy;
+
+            
+
+            var changeRequests = await _context.EmployerEditSuggestions.Where(x => x.EmployerId == requestDto.EmployerId).ToListAsync();
+            changeRequests.ForEach(x => x.Resolved = true);
 
             await _context.SaveChangesAsync();
 
@@ -233,21 +284,6 @@ namespace Application.PublicDataService.DataHandlers
         {
             var item = await _context.EmployerEditSuggestions.SingleAsync(x => x.Id == suggestionId);
             _context.Remove(item);
-            await _context.SaveChangesAsync();
-
-            await UpdateMemoryCache();
-        }
-
-
-        /// <summary>
-        /// Delete unnecessary or unwanted suggestions by username if spammed or flooded by requests...
-        /// </summary>
-        /// <param name="userName"></param>
-        public async Task DeleteSuggestionByUserName (string userName)
-        {
-            var range = await _context.EmployerEditSuggestions.Where(x => x.RequestedBy == userName).ToArrayAsync();
-            _context.RemoveRange(range);
-
             await _context.SaveChangesAsync();
 
             await UpdateMemoryCache();
