@@ -1,6 +1,6 @@
 ﻿namespace Domain.Agreements.CollectiveAgreement
 {
-    public class SalaryTable
+    public class WageSupplementTable
     {
         /// <summary>
         /// Entity id

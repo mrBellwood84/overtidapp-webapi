@@ -160,9 +160,9 @@ namespace Persistence.SeedData
                             }
                         },
 
-                        SalaryTables = new List<SalaryTable>
+                        WageSupplementTable = new List<WageSupplementTable>
                         {
-                            new SalaryTable
+                            new WageSupplementTable
                             {
                                 Id = Guid.NewGuid(),
 
@@ -211,7 +211,7 @@ namespace Persistence.SeedData
                                 }
                             },
 
-                            new SalaryTable
+                            new WageSupplementTable
                             {
                                 Id = Guid.NewGuid(),
 

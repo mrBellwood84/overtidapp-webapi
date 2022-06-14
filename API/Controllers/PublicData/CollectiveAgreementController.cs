@@ -1,8 +1,8 @@
 ﻿using Application.PublicDataService;
 using Domain.Agreements.CollectiveAgreement;
+using Domain.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace API.Controllers.PublicData
 {
@@ -18,7 +18,6 @@ namespace API.Controllers.PublicData
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ActionResult<List<CollectiveAgreementEntity>>> GetAllCollectiveAgreements()
         {
             try
@@ -32,6 +31,23 @@ namespace API.Controllers.PublicData
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<CollectiveAgreementEntity>> GetSingleById(RequestByIdDto id)
+        {
+            try
+            {
+                var result = await _data.CollectiveAgreementData.GetSingleById(id.Id);
+
+                if (result == null) return NotFound();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
         }
     }
 }

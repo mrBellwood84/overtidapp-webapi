@@ -42,6 +42,6 @@
         /// Salary table for minimum wage and wage supplements,
         /// usually change every year
         /// </summary>
-        public List<SalaryTable> SalaryTables { get; set; }
+        public List<WageSupplementTable> WageSupplementTable { get; set; }
     }
 }
